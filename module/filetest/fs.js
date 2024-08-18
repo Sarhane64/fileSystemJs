@@ -1,4 +1,6 @@
-import fs from 'fs' 
+import fs from 'fs'
+import {input} from '@inquirer/prompts'
+import { controllerModel } from './ControllerModel.js'
 
 // Create file
 // fs.appendFile("nouveauFichier.txt", "Mon contenu", function (err) {
@@ -37,7 +39,26 @@ import fs from 'fs'
 //  });
 
 // Lire Un Fichier
-fs.readFile("nouveauFichier.txt", "utf8", function (err, data) {
-  const content = data;
-  console.log(content);
-});
+// fs.readFile("nouveauFichier.txt", "utf8", function (err, data) {
+//  const content = data;
+//  console.log(content);
+// });
+
+// Inquirier + fs
+const test = (modelName) => {
+    const cheminFichier = `model/${modelName}.js`;
+    const contenu = controllerModel(modelName)
+    fs.writeFileSync(cheminFichier, contenu);
+    console.log(`Fichier créé : ${cheminFichier}`);
+}
+
+const init = async () => {
+    const modelName = await input({ message: 'Entrez le nom du modèle' });
+
+    if (modelName) {
+        test(modelName);
+    } else {
+        console.log('Aucun nom de modèle fourni.');
+    }
+}
+init();
